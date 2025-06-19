@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "@tailwindcss/cli": "^4.1.10",
     "body-parser": "^2.2.0",

@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   content: ["./views/**/*.{html,ejs}", "./public/**/*.html"],
   safelist: [
     // Core spacing & sizing utilities
