@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Edit Blog</title>
+         <link href="/output.css" rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+
+    <body class="bg-[#F9F7F7] h-[100vh] w-[100vw] overflow-x-hidden">
+   
+        <form action="/" method="POST" class="p-2 md:p-6 lg:p-8">
+            <div class="titlemonth w-full flex justify-evenly items-center ">
+                <i class="fa-solid fa-file-pen text-lg mt-2"></i>
+                <input placeholder="Create your Blog"
+                    class="w-[100%] text-2xl outline-none font-bold whitespace-break-spaces resize-none  px-2 md:text-2xl lg:text-3xl"
+                    maxlength="80"
+                    onkeydown="keydown(event)" name="title"
+                    value="<%= ediatablecontent.title %>" />
+                <div class="buttons mt-4 w-[25%] flex  justify-around">
+                    <button type="submit"
+                        class="text-2xl bg-[#FFC94A] text-[#fff] h-10 w-20 px-2 py-1 rounded-lg md:text-2xl md:w-24 md:px-3">Save</button>
+
+                </div>
+            </div>
+            <textarea oninput="growheight(this)" id="blog"
+                class="w-[90%] text-xl outline-none  mt-5 resize-none overflow-hidden md:text-2xl lg:text-3xl"
+                name="textcontent"><%= ediatablecontent.content %></textarea>
+        </form>
+        <script>
+        function deleteblog() {
+            fetch("/deleteconfirm", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message })
+            })
+                .then(res => res.json())
+                .then(data => console.log("Data:", data.message))
+                .catch(err => console.error("Error:", err));
+        }
+
+        function growheight(element) {
+            element.style.height = "auto";
+            element.style.height = element.scrollHeight + "px";
+        }
+        function keydown(e) {
+            if (e.key === "Enter") {
+                let currentindex = document.getElementById("blog")
+                currentindex.focus();
+                e.preventDefault();
+
+            }
+        }
+    </script>
+    </body>
+
+</html>

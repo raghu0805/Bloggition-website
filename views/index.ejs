@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MineBlog</title>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
+
+  <link href="/output.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+
+</head>
+
+<body class="bg-[#F9F7F7]  ">
+
+
+  <header class="h-20 bg-[#DBE2EF] w-[100vw] flex  justify-around items-center md:h-24 md:justify-around
+     lg:h-26 lg:justify-between  lg:p-6">
+
+    <h1 class="text-3xl text-black md:text-4xl ">Bloggition</h1>
+    <button
+      class="bg-[#112D4E]   h-12 w-46  flex justify-around items-center rounded-lg py-3 px-2 md:h-14">
+      <span class="bg-white  flex justify-center items-center h-full p-1 font-semibold">
+        <a href="/create"> <i class="fa-regular fa-plus"></i> </a>
+
+      </span>
+      <a href="/create" class=" text-xl text-white font-semibold md:text-2xl">Create
+        Post</a>
+    </button>
+
+  </header>
+  <main class="px-6 py-10">
+    <h1 class="text-3xl text-black text-center mb-8 md:text-4xl">Your Blogs</h1>
+    <section class="w-full  flex flex-wrap gap-4 justify-evenly">
+      <% if (locals.data.length>0 ) { %>
+
+        <% for(let i=0;i<locals.data.length;i++) { %>
+          <div onclick="movetoblogview('<%= i %>')" class="w-[100vw] h-[200px] border bg-white  rounded-lg shadow-md  overflow-hidden py-4 lg:w-[90vw]">
+            <div class="headerpart w-full   flex justify-between items-center px-2">
+              <h2 id="title<%= i %>" class=" text-xl font-semibold  text-[#112D4E]   md:text-3xl md:px-2">
+                <%= data[i]["title"] %>
+              </h2>
+              <div class="icons w-[20%] flex justify-between  md:w-[10%] md:mr-8 lg:w-[5%]">
+                <a href="/edit" onclick="senddata('<%= i %>')">
+                  <i class="fa-solid fa-pen-to-square md:text-2xl"></i></a>
+                <a href="#" onclick="deletedata(event,'<%= i %>')">
+                  <i class="fa-solid fa-xmark text-2xl text-red-500  md:text-2xl"></i>
+                </a>
+              </div>
+
+            </div>
+                        <p id="text-content<%= i %>"
+              class=" text-lg text-gray-700 overflow-y-auto overflow-x-hidden max-h-80 hide-scrollbar whitespace-normal break-words p-2 md:text-xl md:px-4 lg:py-2">
+              <%= data[i]["textcontent"] %>
+            </p>
+
+          </div>
+          <% } %>
+            <% } else { %>
+              <h2 class="text-xl text-gray-600 text-center">No blog posts
+                found.</h2>
+              <% } %>
+    </section>
+  </main>
+  <script>
+    function movetoblogview(value){
+       var title = document.getElementById(`title${value}`).textContent.trim();
+      var content = document.getElementById(`text-content${value}`).textContent.trim();
+      console.log("titleandcontent:", title, content)
+      fetch("/edit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ value, title, content })
+      })
+        .then(res => res.json())
+        .then(data => console.log("Data:", data.message))
+
+      window.location.href="/blogview"
+    }
+
+    function deletedata(event, value) {
+
+      event.preventDefault();
+      var title = document.getElementById(`title${value}`).textContent.trim();
+      var content = document.getElementById(`text-content${value}`).textContent.trim();
+      console.log("titleandcontent:", title, content)
+      fetch("/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ value, title, content })
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log("Data:", data.message);
+
+          window.location.href = "/"
+
+        });
+    }
+    function senddata(value) {
+      var title = document.getElementById(`title${value}`).textContent.trim();
+      var content = document.getElementById(`text-content${value}`).textContent.trim();
+      console.log("titleandcontent:", title, content)
+      fetch("/edit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ value, title, content })
+      })
+        .then(res => res.json())
+        .then(data => console.log("Data:", data.message))
+
+    }
+
+
+  </script>
+
+</body>
+
+</html>
